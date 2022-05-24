@@ -112,7 +112,7 @@ public class HomeWorkDLList {
         }
     }
 
-    public static Node<Integer> getNextEvenInd(Node<Integer> node) {
+    private static Node<Integer> getNextEvenInd(Node<Integer> node) {
         return node.getNNode().getNNode();
     }
 
