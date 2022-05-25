@@ -74,14 +74,19 @@ public class HomeWorkDLList {
         }
         return null;
     }
+
+    private static void changeValues(Node<Integer> node1, Node<Integer> node2) {
+        Integer intTmp = node1.getValue();
+        node1.setValue(node2.getValue());
+        node2.setValue(intTmp);
+    }
+
     private static boolean bubbleIteration(Node<Integer> node1, Node<Integer> node2) {
         int counter = 0;
         while (node2 != null) {
             assert node1 != null;
             if (node1.getValue() > node2.getValue()) {
-                Integer tmp  = node1.getValue();
-                node1.setValue(node2.getValue());
-                node2.setValue(tmp);
+                changeValues(node1, node2);
                 counter++;
             }
             node1 = getNextPos(node1);
@@ -89,26 +94,34 @@ public class HomeWorkDLList {
         }
         return counter == 0;
     }
-    public static void task2A(DLinkedList<Integer> list) {
-        if (list.getHead().getValue() <= 0) {
-            for (int i = 0; i < list.getLength() - 1; i++) {
-                Node<Integer> node1 = getNextPos(list.getHead());
-                Node<Integer> node2 = getNextPos(list.getHead());
-                assert node2 != null;
-                node2 = getNextPos(node2);
-                if (bubbleIteration(node1, node2)) {
-                    break;
-                }
+
+    private static void ifNegativeHead(DLinkedList<Integer> list) {
+        for (int i = 0; i < list.getLength() - 1; i++) {
+            Node<Integer> node1 = getNextPos(list.getHead());
+            Node<Integer> node2 = getNextPos(list.getHead());
+            assert node2 != null;
+            node2 = getNextPos(node2);
+            if (bubbleIteration(node1, node2)) {
+                break;
             }
         }
-        else {
-            for (int i = 0; i < list.getLength() - 1; i++) {
-                Node<Integer> node1 = list.getHead();
-                Node<Integer> node2 = getNextPos(list.getHead());
-                if (bubbleIteration(node1, node2)) {
-                    break;
-                }
+    }
+
+    private static void ifPositiveHead(DLinkedList<Integer> list) {
+        for (int i = 0; i < list.getLength() - 1; i++) {
+            Node<Integer> node1 = list.getHead();
+            Node<Integer> node2 = getNextPos(list.getHead());
+            if (bubbleIteration(node1, node2)) {
+                break;
             }
+        }
+    }
+
+    public static void task02A(DLinkedList<Integer> list) {
+        if (list.getHead().getValue() <= 0) {
+            ifNegativeHead(list);
+        } else {
+            ifPositiveHead(list);
         }
     }
 
@@ -116,19 +129,21 @@ public class HomeWorkDLList {
         return node.getNNode().getNNode();
     }
 
-    public static void task2B(DLinkedList<Integer> list) {
-        for (int i = 0; i < list.getLength() / 2; i++) {
-            Node<Integer> node1 = list.getHead();
-            Node<Integer> node2 = getNextEvenInd(list.getHead());
-            while (node2 != null) {
-                if (node1.getValue() > node2.getValue()) {
-                    Integer tmp = node1.getValue();
-                    node1.setValue(node2.getValue());
-                    node2.setValue(tmp);
-                }
-                node1 = getNextEvenInd(node1);
-                node2 = getNextEvenInd(node2);
+    private static void evenBubbleIteration(DLinkedList<Integer> list) {
+        Node<Integer> node1 = list.getHead();
+        Node<Integer> node2 = getNextEvenInd(list.getHead());
+        while (node2 != null) {
+            if (node1.getValue() > node2.getValue()) {
+                changeValues(node1, node2);
             }
+            node1 = getNextEvenInd(node1);
+            node2 = getNextEvenInd(node2);
+        }
+    }
+
+    public static void task02B(DLinkedList<Integer> list) {
+        for (int i = 0; i < list.getLength() / 2; i++) {
+            evenBubbleIteration(list);
         }
     }
 
@@ -153,26 +168,36 @@ public class HomeWorkDLList {
     }
 
     //Task4: You have list. Insert previous part of the list after each element.
-    public static void task4(DLinkedList<Character> list) {
-        Node<Character> tmp;
-        Node<Character> nodeTmp;
-        for (int index = list.getLength() - 1; index > 0; index--) {
-            tmp = list.getHead();
-            nodeTmp = list.getHead();
-            for (int i = 0; i < index; i++) {
-                tmp = tmp.getNNode();
-            }
-            if (index == list.getLength() - 1) {
-                for (int j = 0; j < index; j++) {
-                    list.push(nodeTmp.getValue());
-                    nodeTmp = nodeTmp.getNNode();
-                }
-            } else {
-                for (int j = 0; j < index; j++) {
-                    list.push(nodeTmp.getValue(), index + j + 1);
-                    nodeTmp = nodeTmp.getNNode();
-                }
-            }
+    private static void pushLastInd(DLinkedList<Character> list, Node<Character> charTmp, int index) {
+        for (int i = 0; i < index; i++) {
+            list.push(charTmp.getValue());
+            charTmp = charTmp.getNNode();
+        }
+    }
+
+    private static void pushNotLastInd(DLinkedList<Character> list, Node<Character> charTmp, int index) {
+        for (int i = 0; i < index; i++) {
+            list.push(charTmp.getValue(), index + i + 1);
+            charTmp = charTmp.getNNode();
+        }
+    }
+
+    private static void pushIteration(DLinkedList<Character> list, int index) {
+        Node<Character> nodeIndex = list.getHead();
+        Node<Character> charTmp = list.getHead();
+        for (int i = 0; i < index; i++) {
+            nodeIndex = nodeIndex.getNNode();
+        }
+        if (index == list.getLength() - 1) {
+            pushLastInd(list, charTmp, index);
+        } else {
+            pushNotLastInd(list, charTmp, index);
+        }
+    }
+
+    public static void task04(DLinkedList<Character> list) {
+        for (int i = list.getLength() - 1; i > 0; i--) {
+            pushIteration(list, i);
         }
     }
 
