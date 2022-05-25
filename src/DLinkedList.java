@@ -1,12 +1,15 @@
 public class DLinkedList<T> {
-    /** properties */
+    /**
+     * properties
+     */
 
     private Node<T> head;
     private int length;
 
 
-
-    /**getters and setters*/
+    /**
+     * getters and setters
+     */
 
     public int getLength() {
         return length;
@@ -24,12 +27,14 @@ public class DLinkedList<T> {
         this.head = head;
     }
 
-    /**returns an element by index (returns null, if index > list.length*/
+    /**
+     * returns an element by index (returns null, if index > list.length
+     */
     public Node<T> getNode(int index) {
         Node<T> tmp = this.head;
         int count = 0;
         while (tmp != null) {
-            if(count == index){
+            if (count == index) {
                 return tmp;
             }
             count++;
@@ -39,7 +44,9 @@ public class DLinkedList<T> {
         //return new Node(null, null, null);
     }
 
-    /**returns first Node with a specified value and null if there is no such a node in the list*/
+    /**
+     * returns first Node with a specified value and null if there is no such a node in the list
+     */
     //проверить, что лучше вернуть, null или new Node(null, null, null)
     public Node<T> getNode(T val) {
         Node<T> tmp = this.head;
@@ -52,7 +59,9 @@ public class DLinkedList<T> {
         return new Node<>(null, null, null);
     }
 
-    /**Returns last element of the list*/
+    /**
+     * Returns last element of the list
+     */
     public Node<T> getLast() {
         Node<T> tmp = this.head;
         while (tmp.getNNode() != null) {
@@ -62,22 +71,27 @@ public class DLinkedList<T> {
     }
 
 
-
 /**Constructors*/
 
-    /**Constructs an empty list*/
+    /**
+     * Constructs an empty list
+     */
     public DLinkedList() {
         this.head = null;
         this.length = 0;
     }
 
-    /**Constructs list by setting its head*/
+    /**
+     * Constructs list by setting its head
+     */
     public DLinkedList(Node<T> head) {
         this.head = head;
         this.length = 1;
     }
 
-    /**Constructs list containing elements of a specified array*/
+    /**
+     * Constructs list containing elements of a specified array
+     */
     public DLinkedList(T[] arrInput) {
         this.head = new Node<>(arrInput[0]);
         this.length = 1;
@@ -86,7 +100,9 @@ public class DLinkedList<T> {
         }
     }
 
-    /**Constructs a new list which is a copy of parameter "list"*/
+    /**
+     * Constructs a new list which is a copy of parameter "list"
+     */
     public DLinkedList(DLinkedList<T> list) {
         this.head = new Node<>(list.getHead().getValue());
         this.length = 1;
@@ -98,10 +114,11 @@ public class DLinkedList<T> {
     }
 
 
-
 /**Output*/
 
-    /**prints list if val-properties are printable*/
+    /**
+     * prints list if val-properties are printable
+     */
     public void print() {
         System.out.print("[");
         Node<T> tmp = this.head;
@@ -113,7 +130,9 @@ public class DLinkedList<T> {
         System.out.println();
     }
 
-    /**Prints the inverse list without inverting it*/
+    /**
+     * Prints the inverse list without inverting it
+     */
     public void printInv() {
         System.out.print("[");
         Node<T> tmp = this.getLast();
@@ -125,15 +144,15 @@ public class DLinkedList<T> {
     }
 
 
-
 /**Push/pop methods*/
 
-    /**inserts an element with "val" value as the last element*/
+    /**
+     * inserts an element with "val" value as the last element
+     */
     public void push(T val) {
         if (this.isVoid()) {
             this.pushHead(val);
-        }
-        else {
+        } else {
             Node<T> tmp = this.head;
             while (tmp.getNNode() != null) {
                 tmp = tmp.getNNode();
@@ -143,36 +162,42 @@ public class DLinkedList<T> {
         this.length++;
     }
 
-    /**inserts an element with "val" value as "index" element*/
+    /**
+     * inserts an element with "val" value as "index" element
+     */
     public void push(T val, int index) {
         if (index == 0) {
             this.pushHead(val);
-        }
-        else {
-            Node<T> tmp = this.head;
-            for (int i = 0; i < index - 1 && tmp.getNNode() != null; i++) {
-                tmp = tmp.getNNode();
+        } else {
+            if (index < this.length) {
+                Node<T> tmp = this.head;
+                for (int i = 0; i < index - 1 && tmp.getNNode() != null; i++) {
+                    tmp = tmp.getNNode();
+                }
+                Node<T> node = new Node<>(val, tmp.getNNode(), tmp);
+                node.getNNode().setPNode(node);
+                tmp.setNNode(node);
             }
-            Node<T> node = new Node<>(val, tmp.getNNode(), tmp);
-            node.getNNode().setPNode(node);
-            tmp.setNNode(node);
         }
         this.length++;
     }
 
-    /**inserts an element with "val" value as the first element*/
+    /**
+     * inserts an element with "val" value as the first element
+     */
     private void pushHead(T val) {
         if (this.isVoid()) {
             this.setHead(new Node<>(val));
-        }
-        else {
+        } else {
             Node<T> node = new Node<>(val, this.head, null);
             this.head.setPNode(node);
             this.head = node;
         }
     }
 
-    /**deletes last element in the list*/
+    /**
+     * deletes last element in the list
+     */
     public void pop() {
         Node<T> tmp = this.head;
         while (tmp.getNNode().getNNode() != null) {
@@ -183,16 +208,16 @@ public class DLinkedList<T> {
         this.length--;
     }
 
-    /**deletes index-th element in the list*/
+    /**
+     * deletes index-th element in the list
+     */
     public void pop(int index) {
         if (index == 0) {
             popHead();
-        }
-        else {
-            if(index == this.length - 1) {
+        } else {
+            if (index == this.length - 1) {
                 pop();
-            }
-            else {
+            } else {
                 Node<T> tmp = this.head;
                 for (int i = 0; i < index - 1 && tmp.getNNode().getNNode() != null; i++) {
                     tmp = tmp.getNNode();
@@ -204,28 +229,33 @@ public class DLinkedList<T> {
         }
     }
 
-    /**deletes the first element in the list*/
+    /**
+     * deletes the first element in the list
+     */
     public void popHead() {
-        if(this.head.getNNode() == null) {
+        if (this.head.getNNode() == null) {
             this.head.setPNode(null);
             this.head.setNNode(null);
             this.head.setValue(null);
-        }
-        else {
+        } else {
             this.head = this.head.getNNode();
             this.head.setPNode(null);
         }
         this.length--;
     }
 
-    /**deletes all elements in the list*/
+    /**
+     * deletes all elements in the list
+     */
     public void popAll() {
         while (this.head.getValue() != null) {
             this.popHead();
         }
     }
 
-    /**deletes first element with val- value in the list*/
+    /**
+     * deletes first element with val- value in the list
+     */
     public void popValue(T val) {
         Node<T> tmp = this.head;
         int count = 0;
@@ -240,7 +270,9 @@ public class DLinkedList<T> {
         }
     }
 
-    /**deletes all elements with val- value in the list*/
+    /**
+     * deletes all elements with val- value in the list
+     */
     public void popAllValues(T val) {
         Node<T> tmp = this.head;
         int count = 0;
@@ -254,9 +286,11 @@ public class DLinkedList<T> {
         }
     }
 
-    /**deletes all elements, which have values, which are equal to value of an index-th element*/
+    /**
+     * deletes all elements, which have values, which are equal to value of an index-th element
+     */
     public void popClones(int index) {
-        for (int i = 0; i < this.length; i ++) {
+        for (int i = 0; i < this.length; i++) {
             if (i != index) {
                 if (this.getNode(i).getValue() == this.getNode(index).getValue()) {
                     this.pop(i);
@@ -266,7 +300,9 @@ public class DLinkedList<T> {
         }
     }
 
-    /**deletes all clone valued elements except first unique valued element*/
+    /**
+     * deletes all clone valued elements except first unique valued element
+     */
     public void popAllClones() {
         for (int i = 0; i < this.length; i++) {
             this.popClones(i);
@@ -274,21 +310,24 @@ public class DLinkedList<T> {
     }
 
 
-
 /**other methods*/
 
-    /**sets valNew value to all elements, that have valPrev value*/
+    /**
+     * sets valNew value to all elements, that have valPrev value
+     */
     public void replace(T valPrev, T valNew) {
         Node<T> tmp = this.head;
         while (tmp != null) {
-            if(tmp.getValue() == valPrev) {
+            if (tmp.getValue() == valPrev) {
                 tmp.setValue(valNew);
             }
             tmp = tmp.getNNode();
         }
     }
 
-    /**returns true if the list is symmetric*/
+    /**
+     * returns true if the list is symmetric
+     */
     public boolean isSymmetric() {
         for (int i = 0; i < this.length / 2; i++) {
             if (getNode(i).getValue() != getNode(this.length - 1 - i).getValue()) {
@@ -298,7 +337,9 @@ public class DLinkedList<T> {
         return true;
     }
 
-    /**returns the amount of elements in the list with unique values*/
+    /**
+     * returns the amount of elements in the list with unique values
+     */
     public int uniqueValues() {
         DLinkedList<T> list = new DLinkedList<>(this);
         int countUnique = 0;
@@ -309,15 +350,19 @@ public class DLinkedList<T> {
         return countUnique;
     }
 
-    /**returns false, if the list has at least one element and true if it is void*/
+    /**
+     * returns false, if the list has at least one element and true if it is void
+     */
     public boolean isVoid() {
         return (this.length == 0);
     }
 
-    /**Inverts the elements order in the list*/
+    /**
+     * Inverts the elements order in the list
+     */
     public void inverse() {
         T tmp;
-        for (int i = 0; i < this.length / 2; i ++) {
+        for (int i = 0; i < this.length / 2; i++) {
             tmp = this.getNode(i).getValue();
             this.getNode(i).setValue(this.getNode(this.length - i - 1).getValue());
             this.getNode(this.length - i - 1).setValue(tmp);

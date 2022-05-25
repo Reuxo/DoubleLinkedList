@@ -189,18 +189,17 @@ public class HomeWorkDLList {
     }
 
     // Task6: You Have a text file. Get a double linked list which elements contain numbers of characters in each line.
-    public static DLinkedList<Integer> task6(BufferedReader bR) throws IOException {
-        DLinkedList<Integer> list = new DLinkedList<>();
+    private static void initializeList(DLinkedList<Integer> list, BufferedReader bR) throws IOException {
         String str = bR.readLine();
-        list.setHead(new Node<>(str.length()));
-        while (true) {
-            try {
-                if ((str = bR.readLine()) == null) break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        list.push(str.length());
+        while ((str = bR.readLine()) != null) {
             list.push(str.length());
         }
+    }
+
+    public static DLinkedList<Integer> task06(BufferedReader bR) throws IOException {
+        DLinkedList<Integer> list = new DLinkedList<>();
+        initializeList(list, bR);
         return list;
     }
 
